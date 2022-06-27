@@ -151,7 +151,19 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
             supportingFiles.add(new SupportingFile("2.1/Program.mustache", packageFolder, "Program.cs"));
             supportingFiles.add(new SupportingFile("2.1/Project.csproj.mustache", packageFolder, this.packageName + ".csproj"));
             supportingFiles.add(new SupportingFile("2.1/Dockerfile.mustache", packageFolder, "Dockerfile"));
-        } else {
+        } else if (this.aspNetCoreVersion.equals("6")) {
+            apiTemplateFiles.put("6/controller.mustache", ".cs");
+            addInterfaceControllerTemplate(interfaceOnly, interfaceController);
+
+            supportingFiles.add(new SupportingFile("6" + File.separator + "Filters" + File.separator + "BasePathFilter.mustache", packageFolder + File.separator + "Filters", "BasePathFilter.cs"));
+            supportingFiles.add(new SupportingFile("6" + File.separator + "Filters" + File.separator + "GeneratePathParamsValidationFilter.mustache", packageFolder + File.separator + "Filters", "GeneratePathParamsValidationFilter.cs"));
+
+            supportingFiles.add(new SupportingFile("6/Startup.mustache", packageFolder, "Startup.cs"));
+            supportingFiles.add(new SupportingFile("6/Program.mustache", packageFolder, "Program.cs"));
+            supportingFiles.add(new SupportingFile("6/Project.csproj.mustache", packageFolder, this.packageName + ".csproj"));
+            supportingFiles.add(new SupportingFile("6/Dockerfile.mustache", packageFolder, "Dockerfile"));
+        }
+         else {
             apiTemplateFiles.put("3.0/controller.mustache", ".cs");
             addInterfaceControllerTemplate(interfaceOnly, interfaceController);
 
@@ -314,7 +326,7 @@ public class AspNetCoreServerCodegen extends AbstractCSharpCodegen {
             return;
         }
         this.aspNetCoreVersion = optionValue;
-        if (!this.aspNetCoreVersion.equals("2.0") && !this.aspNetCoreVersion.equals("2.1") && !this.aspNetCoreVersion.equals("2.2") && !this.aspNetCoreVersion.equals("3.0")) {
+        if (!this.aspNetCoreVersion.equals("2.0") && !this.aspNetCoreVersion.equals("2.1") && !this.aspNetCoreVersion.equals("2.2") && !this.aspNetCoreVersion.equals("3.0")  && !this.aspNetCoreVersion.equals("6")) {
             LOGGER.error("version '" + this.aspNetCoreVersion + "' is not supported, switching to default version: '" + DEFAULT_ASP_NET_CORE_VERSION + "'");
             this.aspNetCoreVersion = DEFAULT_ASP_NET_CORE_VERSION;
         }
